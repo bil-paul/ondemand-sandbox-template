@@ -1,0 +1,30 @@
+<% if service == 'jupyter' %>
+
+  <form  action="/node/<%= host %>/<%= port %>/login" method="post" target="_blank">
+    <input type="hidden" name="password" value="<%= password %>">
+    <button class="btn btn-primary" type="submit">
+      <i class="fa fa-cogs"></i> Connect to JupyterLab
+    </button>
+  </form>
+
+<% elsif service == 'code-server' %>
+ 
+  <%
+    require 'digest'
+
+    # Generate form id, based on host and port
+    form_id = Digest::SHA1.hexdigest("--" + host.to_s + "--" + port.to_s + "--")
+
+    # Generate SHA256 digest of code-server Password
+    cookieValue = Digest::SHA256.hexdigest(password)
+  %>
+
+  <form id="<%= form_id %>"  action="/rnode/<%= host %>/<%= port %>/login?to" method="post" target="_blank">
+    <input type="hidden" name="password" value="<%= password %>">
+    <button class="btn btn-primary" type="submit">
+      <i class="fa fa-cogs"></i> Connect to VS Code
+    </button>
+  </form>
+
+<% end %>
+

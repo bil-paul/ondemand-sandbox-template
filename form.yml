@@ -1,0 +1,79 @@
+cluster: “the_best_cluster”
+
+form:
+  - service
+  - container
+  - workspace
+  - auto_queues
+  - cpus
+  - gpus
+  - mem
+  - bc_num_hours
+  - bc_email_on_started
+
+attributes:
+
+  service:
+    label: "IDE"
+    widget: select
+    options:
+      - ["JupyterLab", "jupyter" ]
+      - ["VS Code", "code-server" ]
+
+  container:
+    label: "Container/Environment"
+    widget: select
+    options:
+      - [“Your Favorite Container”]
+
+  workspace:
+    label: Workspace (optional)
+    help: |
+      Select a folder to start the server in (the default is your `$HOME` directory).
+    data-filepicker: true
+    data-target-file-type: dirs
+    data-default-directory: '$HOME'
+    readonly: true
+    value: '$HOME'
+
+  auto_queues:
+    label: "Partition"
+    value: "dev"
+    required: true
+    display: true
+    help: |
+      <small>Partition to submit the job to</small>
+
+  cpus:
+    label: "#CPUs"
+    widget: "number_field"
+    required: true
+    min: 1
+    value: "1"
+    help: |
+      <small>Number of CPU cores to allocate</small>
+
+  gpus:
+    label: "#GPUs (optional)"
+    widget: "number_field"
+    min: 1
+    max: 8
+    value: ""
+    help: |
+      <small>
+      Number of GPUs to allocate
+      </small>
+
+  mem:
+    label: "Memory (GB) (optional)"
+    widget: "number_field"
+    help: |
+      <small>Amount of memory to allocate</small>
+
+  bc_num_hours:
+    label: "Runtime (in hours)"
+
+  bc_email_on_started:
+    default: false
+    value: 0
+

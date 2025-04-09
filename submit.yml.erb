@@ -1,0 +1,19 @@
+batch_connect:
+  template: "basic"
+  conn_params:
+    - service
+
+script:
+  native: [
+	# these are just placeholder parameter names
+	# the actual parameter names and parameter space will be determined by the cluster you're working on
+            "-num_nodes", "1",
+            "-num_cpu_cores", "<%= cpus.blank?  ? 1 : cpus.to_i %>",
+            <%- if not gpus.blank? -%>
+                "-num_gpus", "<%= gpus.to_i %>",
+            <%- end -%>
+            <%- if not mem.blank? -%>
+                "--mem", "<%= mem.to_i %>G",
+            <%- end -%>
+          ]
+

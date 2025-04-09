@@ -1,0 +1,6 @@
+---
+name: OnDemand Sandbox Template
+category: Interactive Apps
+subcategory: IDE
+role: batch_connect
+description: "This app will launch an IDE of your choice from a container on your cluster\r\n"

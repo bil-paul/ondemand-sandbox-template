@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# Set working directory to home directory
+cd "${HOME}"
+
+# Purge the module environment to avoid conflicts
+#module purge
+
+# Load the apptainer module
+#module load apptainer
+
+# Generate SHA1 encrypted password
+SALT=$(create_passwd 16)
+PASSWORD_SHA1=$(echo -n "${password}${SALT}" | sha1sum | awk {'print $1'})
+
+# this script assumes the cluster has apptainer available
+# this will also work with the appropriate podman commands
+
+if [ "${service}" == "jupyter" ]
+then
+  # there's a weird behavior here where the ServerApp arguments throw errors if they aren't in a certain order
+  apptainer exec /path/to/image/image_latest.sif jupyter lab \
+    --ServerApp.ip=*  \
+    --ServerApp.port=${port}  \
+    --ServerApp.base_url=/node/${host}/${port}/ \
+    --ServerApp.port_retries=0  \
+    --ServerApp.password=sha1:${SALT}:${PASSWORD_SHA1} \
+    --ServerApp.open_browser=False  \
+    --ServerApp.disable_check_xsrf=True \
+    --ServerApp.root_dir=$NOTEBOOK_ROOT \
+    --ServerApp.allow_origin=*
+elif [ "${service}" == "code-server" ]
+then
+  export PASSWORD="$password"
+  apptainer exec /path/to/image/image_latest.sif code-server \
+    --bind-addr="0.0.0.0:${port}" \
+    --auth="password" \
+    ${HOME}	
+fi
